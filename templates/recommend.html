@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movie Recommendation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: ['Poppins', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      .hidden {
+          display: none;
+      }
+  </style>
+  </head>
+  <body class="bg-gray-100 font-poppins">
+    <header class="text-gray-600 body-font bg-green-700 text-white p-1">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <a href="/"><span class="ml-3 text-xl font-bold">Movie Recommender System</span></a>
+        </a>
+        <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+          <a class="mr-5 font-bold" href="/">Home</a>
+          <a class="mr-5 hover:text-gray-900 font-bold" href="/about">About</a>
+          <a class="mr-5 hover:text-gray-900 font-bold" href="/recommendation">Recommendation</a>
+          <a class="mr-5 hover:text-gray-900 font-bold" href="/contact">Contact Us</a>
+        </nav>
+        <button class="inline-flex items-center bg-green-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-green-600 rounded text-base mt-4 md:mt-0 font-bold">
+          Sign In/Up
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </button>          
+      </div>
+    </header>
+
+    
+      <section class="text-gray-400 bg-gray-900 body-font font-poppins">
+        <div class="container px-5 py-24 mx-auto">
+          <div class="flex flex-col text-center w-full mb-12">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Master Cleanse Reliac Heirloom</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep.</p>
+          </div>
+          <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0 items-end sm:space-x-4 sm:space-y-0 space-y-4">
+            <div class="relative sm:mb-0 flex-grow w-full">
+              <form method="POST" action="/recommendation">
+                <label for="full-name" class="leading-7 text-sm text-gray-400">Movie's Name</label>
+                <input type="text" id="movie-name" name="movie_name" class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-900 focus:bg-transparent text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+              </form>
+            </div>
+            <button id="submit-button" class="text-white bg-green-700 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg font-bold">Search</button>
+          </div>
+        </div>
+      </section>
+
+      {% if message %}
+<section id="movie-recommendation-section" class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto">
+          <div class="flex flex-row items-center justify-center bg-gradient-to-r from-green-500 via-green-600 to-green-700 p-10 rounded-xl shadow-2xl max-w-6xl mx-auto">
+            <!-- Movie Poster Section -->
+            <div class="flex justify-center mb-8">
+                <img src="{{ movie_poster_url }}" alt="Movie Poster" class="max-w-72 h-auto rounded-xl shadow-2xl border-8 border-white">
+            </div>
+        
+            <!-- Movie Overview Section -->
+            <div class="flex flex-col w-full mb-10">
+              <h2 class="text-sm text-white font-semibold tracking-widest uppercase mb-3" style="margin-left: 100px; width: fit-content; border-bottom: 3px solid white; padding-bottom: 5px;">OVERVIEW</h2>
+              <h1 class="sm:text-4xl text-3xl font-extrabold text-white mb-4">{{ movie_title }}</h1>
+              <p class="lg:w-3/4 mx-auto text-lg text-white opacity-90">{{ overview }}</p>
+              <div class="flex gap-6 items-center" style="margin-left: 100px;">
+                <!-- IMDb -->
+                <div class="flex flex-col items-center">
+                    
+                    <a href="https://www.imdb.com" target="_blank">
+                        <img src="https://cdn-icons-png.flaticon.com/512/889/889199.png" style="width: 50px;" alt="IMDb">
+                    </a>
+                </div>
+        
+                <!-- Rotten Tomatoes -->
+                <div class="flex flex-col items-center">
+                    
+                    <a href="https://www.rottentomatoes.com" target="_blank">
+                        <img src="https://variety.com/wp-content/uploads/2019/02/rotten-tomatoes.jpg?w=1000&h=667&crop=1" style="width: 50px;" alt="Rotten Tomatoes">
+                    </a>
+                </div>
+        
+                <!-- Netflix -->
+                <div class="flex flex-col items-center">
+                    
+                    <a href="https://www.netflix.com" target="_blank">
+                        <img src="https://www.flaticon.com/free-icon/netflix_2504929?term=netflix&page=1&position=2&origin=search&related_id=2504929g" style="width: 50px;" alt="Netflix">
+                    </a>
+                </div>
+        
+                <!-- Hulu -->
+                <div class="flex flex-col items-center">
+                    
+                    <a href="https://www.hulu.com" target="_blank">
+                        <img src="https://logodix.com/logo/6240.png" style="width: 50px;" alt="Hulu">
+                    </a>
+                </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        
+        
+          <div class="flex flex-wrap">
+            <!-- Director Block -->
+            <div class="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
+              <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Director 👨🏻‍💼</h2>
+              <p class="leading-relaxed text-base mb-4">{{ director_name }}</p>
+              <a class="text-indigo-500 inline-flex items-center font-bold">Learn More
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+            <!-- Authors List Block -->
+            <div class="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
+              <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Authors List 📜</h2>
+              <p class="leading-relaxed text-base mb-4">{{ authors_list }}</p>
+              <a class="text-indigo-500 inline-flex items-center font-bold">Learn More
+
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+            <!-- Rating Block -->
+            <div class="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
+              <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Rating ⭐⭐⭐⭐⭐</h2>
+              <p class="leading-relaxed text-base mb-4">Rating: {{ rating }}</p>
+              <a class="text-indigo-500 inline-flex items-center font-bold">Learn More
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+            <!-- Sites Block -->
+            <div class="xl:w-1/4 lg:w-1/2 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
+              <h2 class="text-lg sm:text-xl text-gray-900 font-medium title-font mb-2">Sites to Watch 🎥</h2>
+              <p class="leading-relaxed text-base mb-4">Available on major streaming platforms such as Netflix, Hulu, etc.</p>
+              <a class="text-indigo-500 inline-flex items-center font-bold">Learn More
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <button class="flex mx-auto mt-16 text-white bg-green-700 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg font-bold">Explore</button>
+        </div>
+      </section>
+      
+
+
+      <section id="movie-overview-section" class="text-gray-600 body-font bg-gray-50 py-24">
+        <div class="container px-5 mx-auto">
+          <div class="flex flex-wrap w-full mb-20">
+            <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
+              <h1 class="sm:text-3xl text-2xl font-bold text-green-700 title-font mb-2">
+                Recommended Movies
+              </h1>
+              <div class="h-1 w-20 bg-green-500 rounded"></div>
+            </div>
+            <p class="lg:w-1/2 w-full leading-relaxed text-gray-600 text-lg">
+              We recommend movies based on the similarity of their title and the director's name, helping you discover films with similar themes and creative vision. 
+              <span class="text-green-600 font-medium">
+                Whether you’re looking for something similar in style or direction, our system finds movies that match your preferences.
+              </span>
+            </p>
+          </div>
+          <div class="flex flex-wrap -m-4">
+            {% for movie in recommendations %}
+            <div class="xl:w-1/4 md:w-1/2 p-4">
+              <div class="bg-white p-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all max-h-82">
+                {% if movie.image %}
+                <img src="{{ movie.image }}" alt="Movie Poster" class="w-full h-max-80 object-cover rounded-lg mb-4">
+                {% else %}
+                <p class="text-center text-gray-400 italic">No image available</p>
+                {% endif %}
+                <h2 
+                class="text-lg font-semibold text-gray-900 mb-2 hover:text-green-600 transition-all uppercase tracking-wide">
+                {{ movie.title }}
+              </h2>
+                <h3 class="text-sm text-gray-600 mb-4">
+                  <span class="text-gray-800 font-bold">Director:</span> {{ movie.director }}
+                </h3>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      
+      {% else %}
+      <section class="bg-gray-100">
+        <div class="container mx-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Action Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSIvMBFJtjstIHuEW8JpWt_ecJj5vTppD17K2lWAdBrNofDl_QYp2YMuASAFNQWNuddWjPTF6cVw3nOSKnjFYVG92_JrdEDBTc3wXduSKWquqbUpJjM5IWkB5tettP_idLeYjubVTWIPg/s1600/dumb-and-dumber-film.jpg" alt="Action Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Comedy</h2>
+                        <p class="text-white text-sm mt-2">Explosive comedy movies for thrill-seekers.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                          Explore Collection
+                        </button>
+                    </div>
+                </div>
+                <!-- Romance Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://resizing.flixster.com/sPD8qwWkiDUukuoxqY8sx4oqD-Y=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzFlNjZlYzRkLThjZTItNDUyYi05ZDUzLTg1NGE2YTc2YTM5MC5wbmc=" alt="Romance Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Horror</h2>
+                        <p class="text-white text-sm mt-2">Heartwarming movies for romantic moments.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                          Explore Collection
+                        </button>
+                    </div>
+                </div>
+                <!-- Sci-Fi Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://townsquare.media/site/442/files/2017/10/tron-legacy.jpg?w=780&q=75" alt="Sci-Fi Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Sci-Fi</h2>
+                        <p class="text-white text-sm mt-2">Explore futuristic and out-of-this-world stories.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                            Explore Collection
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+      <section class="bg-gray-100">
+        <div class="container mx-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Action Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://i.ytimg.com/vi/yEZZ5tiiISU/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBEGllorktwjMn1_B0jihzogKLuPg" alt="Action Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Action</h2>
+                        <p class="text-white text-sm mt-2">Explosive action-packed movies for thrill-seekers.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                          Explore Collection
+                        </button>
+                    </div>
+                </div>
+                <!-- Romance Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://breakinginthehabit.org/wp-content/uploads/2016/11/romance-box-1b75442dcb3e05ccbc614455b5ac2670.jpg" alt="Romance Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Romance</h2>
+                        <p class="text-white text-sm mt-2">Heartwarming movies for romantic moments.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                          Explore Collection
+                        </button>
+                    </div>
+                </div>
+                <!-- Sci-Fi Movies Card -->
+                <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://media.baamboozle.com/uploads/images/386032/1636170091_427202.png" alt="Sci-Fi Movies" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+                        <h2 class="text-white text-xl font-bold">Drama</h2>
+                        <p class="text-white text-sm mt-2">Explore futuristic and out-of-this-world stories.</p>
+                        <button class="mt-4 px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-700">
+                            Explore Collection
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      
+      {% endif %}
+
+      <footer class="text-gray-600 bg-gray-900 body-font">
+        <div class="container px-5 py-24 mx-auto">
+          <div class="flex flex-wrap md:text-left text-center order-first">
+            <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+              <h2 class="title-font font-medium text-white tracking-widest text-sm mb-3">COMPANY</h2>
+              <nav class="list-none mb-10">
+                <li>
+                  <a class="text-white hover:text-gray-800 text-sm">About</a>
+                </li>
+                <li>
+                  <a class="text-white hover:text-gray-800 text-sm">Careers</a>
+                </li>
+                <li>
+                  <a class="text-white hover:text-gray-800 text-sm">Our Culture</a>
+                </li>
+                <li>
+                  <a class="text-white hover:text-gray-800 text-sm">Giving</a>
+                </li>
+              </nav>
+            </div>
+            <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                <h2 class="title-font font-medium text-white tracking-widest text-sm mb-3">DOWNLOADS</h2>
+                <nav class="list-none mb-10">
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Plex Media Server</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Plex</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Plexamp</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Plex Photos</a>
+                  </li>
+                </nav>
+            </div>
+            <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                <h2 class="title-font font-medium text-white tracking-widest text-sm mb-3">SUPPORT</h2>
+                <nav class="list-none mb-10">
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Finding Help</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Support Library</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Community Forums</a>
+                  </li>
+                  <li>
+                    <a class="text-white hover:text-gray-800 text-sm">Community Guidelines</a>
+                  </li>
+                </nav>
+            </div>
+            <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+              <h2 class="title-font font-medium text-white tracking-widest text-sm mb-3">SUBSCRIBE</h2>
+              <div class="flex xl:flex-nowrap md:flex-nowrap lg:flex-wrap flex-wrap justify-center items-end md:justify-start">
+                <div class="relative w-40 sm:w-auto xl:mr-4 lg:mr-0 sm:mr-4 mr-2">
+                  <label for="footer-field" class="leading-7 text-sm text-white">Placeholder</label>
+                  <input type="text" id="footer-field" name="footer-field" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:bg-transparent focus:ring-2 focus:ring-green-200 focus:border-green-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                </div>
+                <button class="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded">Button</button>
+              </div>
+              <p class="text-white text-sm mt-2 md:text-left text-center">Bitters chicharrones fanny pack
+                <br class="lg:block hidden">waistcoat green juice
+              </p>
+            </div>
+          </div>
+        </div>
+        <hr color="white">
+        <div class="bg-gray-900">
+          <div class="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
+            <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+              <span class="ml-3 text-xl text-white">Machine Learning</span>
+            </a>
+            <p class="text-sm text-white sm:ml-6 sm:mt-0 mt-4">Made by — students 💼
+              <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" class="text-white ml-1" target="_blank">@movie</a>
+            </p>
+            <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+              <a class="text-gray-500">
+                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24" color="white">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                </svg>
+              </a>
+              <a class="ml-3 text-gray-500">
+                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24" color="white">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                </svg>
+              </a>
+              <a class="ml-3 text-gray-500">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24" color="white">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                </svg>
+              </a>
+              <a class="ml-3 text-gray-500">
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24" color="white">
+                  <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+                  <circle cx="4" cy="4" r="2" stroke="none"></circle>
+                </svg>
+              </a>
+            </span>
+          </div>
+          </div>
+        </footer>
+  
+      
+
+
+
+      <script>
+        document.querySelector('#submit-button').addEventListener('click', function(event) {
+          
+            const movieName = document.getElementById('movie-name').value;
+            if (!movieName) {
+                event.preventDefault();
+                alert('Please enter a movie name.');
+            } else {
+              // document.querySelector('form').submit();
+              document.querySelector('form').submit();
+            }
+        });
+    </script>
+
+      <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+          const movieName = document.getElementById('movie-name').value;
+          
+          if (!movieName) {
+            alert('Please enter a movie name.');
+          }
+
+          console.log(movieName);
+        });
+      </script>  
+
+
+    
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
